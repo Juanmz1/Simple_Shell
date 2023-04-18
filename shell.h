@@ -6,4 +6,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <sys/wait.h>
+
+#define MAX_INPUT_LENGTH 512
+
 #endif
