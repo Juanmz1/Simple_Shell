@@ -57,6 +57,9 @@ int main (int ac, char **argv)
 			token = strtok(NULL, deli);
 		}
 		argv[i] = NULL;
+		exec(argv);
+	}
+		
 		printf("%s\n", lineptr);
 		for (i = 0; i < token_count - 1; i++)
 		{
