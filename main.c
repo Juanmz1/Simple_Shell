@@ -18,12 +18,15 @@ int main (int ac, char **argv)
   {
 	  printf ("%s", prompt);
 	  n_char = getline(&lineptr, &n, stdin);
-	  printf("%s\n", lineptr);
+/* check if the getline function failed use CTRL + D*/
+	 
 	  if (n_char == -1)
-	  {
+	  
+	    {
 		  perror("command not found -> End of File/use of Ctrl+D");
 		  return (-1);
 	  }
+	  printf("%s\n", lineptr);
   }
 	  free (lineptr);
 	  return (0);
