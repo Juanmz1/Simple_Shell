@@ -17,7 +17,15 @@
 
 int token_cmd(char *command, char *const argv[]);
 extern char **environ;
+<<<<<<< HEAD
 void excecmd(char *const argv[], char *const envp[]);
 int main(int ac, char *const argv[], char *const envp[]);
+=======
+<<<<<<< HEAD
+char *get_location(char *command);
+void excecmd(char **argv, char **envp);
+int main(int ac, char **argv, char **envp);
+>>>>>>> c9ae6cca92e808eacef019660c45fee1e567e6b3
+>>>>>>> 76d01e0b034520c6fd21700581195c4b8b32582e
 
 #endif
