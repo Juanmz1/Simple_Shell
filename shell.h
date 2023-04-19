@@ -9,5 +9,7 @@
 #define MAX_INPUT_LENGTH 1024
 
 extern char **environ;
+void exec(char **argv);
+char *get_location(char *command);
 
 #endif
