@@ -4,9 +4,12 @@
  * @argv: argument pass
  * Return: void
  */
-void excecmd(char **argv)
+#define MAX_COMMANDS 10
+void excecmd(char *const argv[], char *const envp[])
 {
-	char *cmd = NULL;
+	char *cmd[MAX_COMMANDS];
+	char *const argv[MAX_COMMANDS];
+
 
 	if (argv)
 	{
