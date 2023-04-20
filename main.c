@@ -1,85 +1,57 @@
 #include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * main - entry point
  * @ac: arg count
  * @argv: arg vector
+ * @envp: array of environment variables
  * Return: 0 
 */
 #define MAX_COMMANDS 10
-int main (int ac, char *const argv[], char *const envp[])
+int main (int ac, char *argv[], char *envp[])
 {
-	char *prompt = "(Ishell) $ ";
-	char *lineptr = NULL, *lineptr_cpy = NULL;
-	const char *deli = " \n";
-	size_t n = 0;
+	char **string;
+	char *prompt = "cisfun$";
+	char *lineptr;
+	size_t n = 20, pah = 4;
 	ssize_t n_char;
-	char *token;
-	char *const argv[MAX_COMMANDS];
-	int i;
-	int token_count;
-	pid_t pid;
-	int status;
-	(void)ac;
-	
+	char *fchk;
+
+	if (ac > 1)
+		argv[1] = NULL;
 	while (1)
 	{
-		printf ("%s", prompt);
+		if (isatty(STDIN_FILENO))
+			printf ("%s", prompt);
+		lineptr = malloc(sizeof(char) * n);
 		n_char = getline(&lineptr, &n, stdin);
 		if (n_char == -1)
-		{
-			printf("command not found -> End of File/use of Ctrl+D");
-			return (-1);
-		}
-		//memory allocation of the lineptr_cpy//
-		lineptr_cpy = malloc(sizeof(char) *n_char);
-		if (lineptr_cpy == NULL)
-		{
-			perror("tsh: memory allocation error");
-			return (-1);
-		}
-		// copy the lineptr to the lineptr_cpy//
-		strcpy(lineptr_cpy, lineptr);
-		pid == fork(); // duplicating the process
-		if (pid == -1)
 		{
 			free(lineptr);
 			exit(EXIT_FAILURE);
 		}
-		if (pid == 0) //calling the child process
+		if (lineptr[0] != '\n')
 		{
-			token = strtok(lineptr, deli);
-			while (token != NULL)
-			{
-				token_count++;
-				token = strtok(NULL, deli);
-			}
-			token_count++;
-			// allocate a space to hold the array of string
-			argv = malloc(sizeof(char *) *token_count);
-			// store the token in the array
-			token = strtok(lineptr_cpy, deli);
-			for (i = 0; token != NULL; i++)
-			{
-				argv[i] = malloc(sizeof(char) *strlen(token));
-				strcpy(argv[i], token);
-				token = strtok(NULL, deli);
-			}
-			argv[i] = NULL;
-			//printf("%s\n", lineptr);
-			//for (i = 0; i < token_count - 1; i++
-			////{
-			//printf("%s\n", argv[i]);
-			//}
-			excecmd(argv);
-
-			free(lineptr);
-			free(lineptr_cpy);
+			string = token_cmd(&lineptr);
+			if (strcmp("exit", string[0]) == 0)
+				break;
+			if (strcmp("exit", string[0]) == 0)
+				exit_shell(EXIT_SUCCESS);
+			fchk = fcheck(string[0]);
+			if (fchk != NULL)
+				string[0] = fchk;
+			pah = pcheck(string[0]);
+			if (pah == 1)
+				excecmd(string, envp);
+			else if (fchk == NULL && pah == 0)
+				printf("./shell: No such file or directory\n");
+			free(string);
 		}
-		else
-		{
-			wait(&status);//wait for the child process to run
-		}
+		free(lineptr);
 	}
+	free(fchk);
+
 	return (0);
 }

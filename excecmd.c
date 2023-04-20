@@ -1,23 +1,36 @@
 #include "shell.h"
+#include <sys/wait.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
 /**
- * excecmd - execute a command
- * @argv: argument pass
+ * excecmd - execute a command and fork the process
+ * @arrs: Arrays of string gotten from the command line
+ * @envp: Environment variable from the parent
  * Return: void
  */
 #define MAX_COMMANDS 10
-void excecmd(char *const argv[], char *const envp[])
+void excecmd(char **arrs, char *envp[])
 {
-	char *cmd[MAX_COMMANDS];
-	char *const argv[MAX_COMMANDS];
+	pid_t pid;
+	int status;
 
-
-	if (argv)
+	pid = fork();
+	if (pid < 0)
 	{
-		cmd = argv[0];
-
-		if (execve(cmd, argv, NULL) == -1)
+		perror("Error: fork issue");
+		return;
+	}
+	if (pid == 0)
+	{
+		if (execve(arrs[0], arrs, envp) == -1)
 		{
-			perror("Error:");
-		};
+			perror("./shell: No such file or directory\n");
+		}
+	}
+	else
+	{
+		wait(&status);
 	}
 }

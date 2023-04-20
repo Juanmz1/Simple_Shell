@@ -15,17 +15,13 @@
 #include <errno.h>
 #define MAX_ARGUMENTS 10
 
-int token_cmd(char *command, char *const argv[]);
+void exit_shell(int status);
+char **token_cmd(char *lineptr_cpy);
 extern char **environ;
-<<<<<<< HEAD
-void excecmd(char *const argv[], char *const envp[]);
-int main(int ac, char *const argv[], char *const envp[]);
-=======
-<<<<<<< HEAD
 char *get_location(char *command);
-void excecmd(char **argv, char **envp);
-int main(int ac, char **argv, char **envp);
->>>>>>> c9ae6cca92e808eacef019660c45fee1e567e6b3
->>>>>>> 76d01e0b034520c6fd21700581195c4b8b32582e
+void excecmd(char **arrs, char *envp[]);
+int main(int ac, char *argv[], char *env[]);
+char *fcheck(char *cmd);
+int pcheck(char *cmd);
 
 #endif
