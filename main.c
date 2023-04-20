@@ -13,9 +13,9 @@
 int main (int ac, char *argv[], char *envp[])
 {
 	char **string;
-	char *prompt = "cisfun$";
+	char *prompt = "Ishell#$ ";
 	char *lineptr;
-	size_t n = 20, pah = 4;
+	size_t n = 20, pah = 10;
 	ssize_t n_char;
 	char *fchk;
 
@@ -34,7 +34,7 @@ int main (int ac, char *argv[], char *envp[])
 		}
 		if (lineptr[0] != '\n')
 		{
-			string = token_cmd(&lineptr);
+			string = token_cmd(lineptr);
 			if (strcmp("exit", string[0]) == 0)
 				break;
 			if (strcmp("exit", string[0]) == 0)

@@ -13,7 +13,7 @@ char *fcheck(char *cmd)
 {
 	DIR *direc = opendir("/bin/");
 	char *tmp, *caten;
-	struct dirent end;
+	struct dirent *end;
 	
 	if (direc == NULL)
 		return (NULL);
@@ -23,7 +23,14 @@ char *fcheck(char *cmd)
 		tmp = end->d_name;
 		if (strcmp(tmp, cmd) == 0)
 		{
-			caten = strcat("/bin/", cmd);
+			caten = (char *)malloc(sizeof(strlen("/bin/") + strlen(cmd) + 1));
+			if (caten == NULL)
+			{
+				closedir(direc);
+				return (NULL);
+			}
+			strcpy(caten, "/bin/");
+			strcat(caten, cmd);
 			closedir(direc);
 			return (caten);
 		}
