@@ -1,0 +1,129 @@
+#ifndef SHELL_H
+#define SHELL_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/wait.h>
+#define MAX_INPUT_LENGTH 1024
+#define MAX_COMMANDS 10
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <limits.h>
+#include <fcntl.h>
+#include <errno.h>
+#define MAX_ARGUMENTS 10
+#define MAX_INPUT_SIZE 1024
+#define MAX_TOKEN_SIZE 64
+#define MAX_NUM_TOKENS 64
+
+void exit_shell(char *status_str);
+
+void exit_shell(char *status_str) {
+    int status = 0;
+    if (status_str != NULL) {
+        status = atoi(status_str);
+    }
+    exit(status);
+}
+
+int main() {
+    char *line = NULL;
+    char *tokens[MAX_NUM_TOKENS];
+    char *token;
+    int num_tokens;
+    int i, status;
+
+    printf("Simple Shell 0.4+\n");
+
+    while (1) {
+        /* Print prompt */
+        printf("> ");
+        fflush(stdout);
+
+        /* Read a line of input */
+        ssize_t input_size = 0;
+        getline(&line, &input_size, stdin);
+
+        /* Split the line into tokens */
+        token = strtok(line, " \t\n");
+        num_tokens = 0;
+        while (token != NULL && num_tokens < MAX_NUM_TOKENS) {
+            tokens[num_tokens] = token;
+            num_tokens++;
+            token = strtok(NULL, " \t\n");
+        }
+        tokens[num_tokens] = NULL;
+
+        /* Check for built-in commands */
+        if (strcmp(tokens[0], "exit") == 0) {
+            if (num_tokens > 2) {
+                printf("Usage: exit status\n");
+            } else if (num_tokens == 2) {
+                exit_shell(tokens[1]);
+            } else {
+                exit_shell(NULL);
+            }
+        } else {
+            /* Fork a child process to execute the command */
+            pid_t pid = fork();
+            if (pid == -1) {
+                perror("fork");
+                exit(EXIT_FAILURE);
+            } else if (pid == 0) {
+                /* Child process */
+                if (execvp(tokens[0], tokens) == -1) {
+                    perror("execvp");
+                    exit(EXIT_FAILURE);
+                }
+            } else {
+                /* Parent process */
+                if (wait(&status) == -1) {
+                    perror("wait");
+                    exit(EXIT_FAILURE);
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+The exit_shell function takes a string argument (status_str) and converts it to an integer using atoi. If status_str is NULL, the function exits with a status of 0. Otherwise, it exits with the integer value of status_str.
+
+In the main function, we check for the "exit" command and handle it accordingly. If the user provides an argument, we pass it to exit_shell. If the user provides more than one argument, we print a usage message.
+
+Note that this implementation assumes that the user provides a valid integer for the status argument. If the user provides a non-integer value, the behavior of the exit function is undefined.
+
+
+
+
+flexflakes@gmail.com
+what is the prototype for the main.h file
+The "main.h" file is typically used to define function prototypes and include any necessary header files for the main program file.
+
+Assuming that the main program file is named "main.c", the prototype for the "main" function in the "main.h" file would be:
+
+c
+Copy code
+int main(void);
+This is the standard prototype for the main function in C, which takes no arguments and returns an integer value. However, if your program accepts command-line arguments, the prototype may be:
+
+c
+Copy code
+int main(int argc, char *argv[]);
+This version of the main function takes two arguments: "argc", which represents the number of command-line arguments, and "argv", which is an array of strings that contains the com
+int token_cmd(char *command, char *const argv[]);
+extern char **environ;
+<<<<<<< HEAD
+void excecmd(char *const argv[], char *const envp[]);
+int main(int ac, char *const argv[], char *const envp[]);
+=======
+<<<<<<< HEAD
+char *get_location(char *command);
+void excecmd(char **argv, char **envp);
+int main(int ac, char **argv, char **envp);
+>>>>>>> c9ae6cca92e808eacef019660c45fee1e567e6b3
+>>>>>>> 76d01e0b034520c6fd21700581195c4b8b32582e
+
+#endif
