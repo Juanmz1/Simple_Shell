@@ -32,7 +32,7 @@ int main (int ac, char *argv[], char *envp[])
 			free(lineptr);
 			exit(EXIT_FAILURE);
 		}
-		if (lineptr[0] != '\n')
+		if (*lineptr != '\n')
 		{
 			string = token_cmd(lineptr);
 			if (strcmp("exit", string[0]) == 0)
@@ -47,11 +47,11 @@ int main (int ac, char *argv[], char *envp[])
 				excecmd(string, envp);
 			else if (fchk == NULL && pah == 0)
 				printf("./shell: No such file or directory\n");
-			free(string);
 		}
-		free(lineptr);
 	}
 	free(fchk);
+	free(lineptr);
+	free(string);
 
 	return (0);
 }
