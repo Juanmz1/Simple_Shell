@@ -1,4 +1,5 @@
 #include "shell.h"
+#define MAX_ARGS 10
 
 /**
  * main - point of entry
@@ -7,10 +8,11 @@
  * Returns: 0
  */
 
-int main ()
+int main()
 {
-char* args [MAX_ARGS];
-char arg_buffer[MAX_ARG_LENGTH];
+int MAX_ARGS = 10;
+char *args [MAX_ARGS];
+char arg_buffer[MAX_ARGUMENTS];
 int num_args = 0;
 
 while (1)
@@ -19,17 +21,17 @@ printf("> ");
 fflush(stdout);
 
 /**
-read the input line 
+ * read the input line 
 */
       
-char input_buffer[MAX_ARG_LENGTH];
-fgets(input_buffer, MAX_ARG_LENGTH, stdin);
+char input_buffer[MAX_ARGUMENTS];
+fgets(input_buffer, MAX_ARGUMENTS, stdin);
 
- /**
-tokenize input line into argument
- */
+/**
+ * tokenize input line into argument
+*/
 num_args = 0;
-char* arg = strtok (input_buffer, "\n");
+char *arg = strtok (input_buffer, "\n");
 while (arg != NULL && num_args < MAX_ARGS)
 args[num_args++] = arg;
 arg = strtok(NULL, "\n");
@@ -38,10 +40,9 @@ args[num_args] = NULL;
 if (num_args == 0)
 {
 /**
-Empty command, ignore
-*/
+ * Empty command, ignore
 continue;
-}
+*/
 if (strcmp(args[0], "setenc") == 0)
 {
 /**
@@ -56,8 +57,7 @@ fprintf(stderr, "Usage: setenv VARIABLE VALUE\n");
 else if (strcmp(args[0], "unsetenv") == 0)
 {
 /**
-unsetenv command
-*/
+ * unsetenv command */
 if (num_args != 2)
 {
 fprintf(stderr, "Usage: unsetenv VARIABLE\n");
@@ -74,8 +74,7 @@ else
 {
 /**
 Unsupported command, ignore
-*/
-continue;
+continue; */
 }
 return (0);
 }
