@@ -25,6 +25,7 @@ int pcheck(char *cmd);
 char *args[MAX_ARGS];
 char arg_buffer[MAX_ARGUMENTS];
 setenv("MY_VAR", "my_value", 1);
-
+int cd(char **args)
+  
 
 #endif
