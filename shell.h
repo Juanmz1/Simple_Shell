@@ -18,13 +18,11 @@
 void exit_shell(int status);
 char **token_cmd(char *lineptr_cpy);
 extern char **environ;
-void excecmd(char **arrs, char *envp[]);
-int main(int ac, char *argv[], char *env[]);
+void excecmd(char **arr);
+int main(int ac, char *argv[]);
 char *fcheck(char *cmd);
 int pcheck(char *cmd);
-char *args[MAX_ARGS];
-char arg_buffer[MAX_ARGUMENTS];
-setenv("MY_VAR", "my_value", 1);
-
+char *togetenv(char *cmd);
+char *print_env(char *cmd);
 
 #endif

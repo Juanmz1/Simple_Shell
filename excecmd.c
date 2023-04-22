@@ -7,24 +7,31 @@
 /**
  * excecmd - execute a command and fork the process
  * @arrs: Arrays of string gotten from the command line
- * @envp: Environment variable from the parent
  * Return: void
  */
 #define MAX_COMMANDS 10
-void excecmd(char **arrs, char *envp[])
+void excecmd(char **arrs)
 {
 	pid_t pid;
 	int status;
+	char *cmd_act = NULL;
+	char *cmd_envp = NULL;
 
 	pid = fork();
-	if (pid < 0)
+	if (pid == -1)
 	{
 		perror("Error: fork issue");
-		return;
+		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
 	{
-		if (execve(arrs[0], arrs, envp) == -1)
+		cmd_envp = print_env(arrs[0]);
+		cmd_act = togetenv(arrs[0]);
+		if (execve(cmd_act, arrs, NULL) == -1)
+		{
+			perror("./shell: No such file or directory\n");
+		}
+		if (execve(cmd_envp, arrs, NULL) == -1)
 		{
 			perror("./shell: No such file or directory\n");
 		}

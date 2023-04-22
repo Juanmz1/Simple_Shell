@@ -10,14 +10,13 @@
  * Return: 0 
 */
 #define MAX_COMMANDS 10
-int main (int ac, char *argv[], char *envp[])
+int main (int ac, char *argv[])
 {
 	char **string;
 	char *prompt = "Ishell#$ ";
-	char *lineptr;
-	size_t n = 20, pah = 10;
+	char *lineptr = NULL;
+	size_t n = 0;
 	ssize_t n_char;
-	char *fchk;
 
 	if (ac > 1)
 		argv[1] = NULL;
@@ -29,27 +28,19 @@ int main (int ac, char *argv[], char *envp[])
 		n_char = getline(&lineptr, &n, stdin);
 		if (n_char == -1)
 		{
-			free(lineptr);
-			exit(EXIT_FAILURE);
+			printf("EXITING SHELL");
+			return (-1);
 		}
 		if (*lineptr != '\n')
 		{
 			string = token_cmd(lineptr);
-			if (strcmp("exit", string[0]) == 0)
+			if (strcmp("exit",string[0]) == 0)
 				break;
 			if (strcmp("exit", string[0]) == 0)
 				exit_shell(EXIT_SUCCESS);
-			fchk = fcheck(string[0]);
-			if (fchk != NULL)
-				string[0] = fchk;
-			pah = pcheck(string[0]);
-			if (pah == 1)
-				excecmd(string, envp);
-			else if (fchk == NULL && pah == 0)
-				printf("./shell: No such file or directory\n");
+			excecmd(string);
 		}
 	}
-	free(fchk);
 	free(lineptr);
 	free(string);
 
