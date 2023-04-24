@@ -1,7 +1,7 @@
 #include "shell.h"
-#define MAX_COMMAND_LENGTH 100
 #define MAX_ARGUMENTS 100
 #define MAX_ALIASES 100
+#define MAX_COMMAND_LENGTH 100
 
 int main(int ac, char *av[]);
 void parse_input(char *input, char **args);
@@ -49,6 +49,18 @@ i++;
 }
 }
 
+char *get_alias_value(char *name)
+{
+for (int i = 0; i < num_aliases; i++)
+{
+if (strcmp(aliases[i][0], name) == 0)
+{
+return aliases[i][1];
+}
+}
+return (NULL);
+}
+
 void execute_command(char **args, int *status)
 {
 pid_t pid = fork();
@@ -72,9 +84,9 @@ exit(EXIT_FAILURE);
 }
 else
 {
-    waitpid(pid, status, 0);
+waitpid(pid, status, 0);
 }
-
+}
 
 void handle_logical_operators(char **args, int *status)
 {
@@ -146,4 +158,5 @@ num_aliases++;
 else
 {
 printf("Too many aliases defined\n");
+}
 }
