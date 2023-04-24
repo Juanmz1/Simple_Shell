@@ -30,7 +30,7 @@ printf("%s\n", new_dir);
 */
 if (getcwd(old_dir, sizeof(old_dir)) == NULL)
 {
-perror(getcwd);
+perror("getcwd error");
 return (1);
 }
 

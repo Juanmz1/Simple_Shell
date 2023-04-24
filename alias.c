@@ -1,4 +1,4 @@
-#!/bin/bash
+include "shell.h"
 
 declare - A aliases
 
