@@ -23,9 +23,9 @@ int main (int ac, char *argv[])
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-			printf ("%s", prompt);
+			printf("%s", prompt);
 		lineptr = malloc(sizeof(char) * n);
-		n_char = getline(&lineptr, &n, stdin);
+		n_char = my_getline(&lineptr, &n, stdin);
 		if (n_char == -1)
 		{
 			printf("EXITING SHELL");

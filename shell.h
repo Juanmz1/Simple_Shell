@@ -22,5 +22,31 @@ void excecmd(char **arr);
 int main(int ac, char *argv[]);
 char *togetenv(char *cmd);
 char *print_env(char *cmd);
+size_t my_getline(char **lineptr, size_t *n, FILE *stream);
+
+typedef struct passinfo
+{
+	char *arg;
+	char **argv;
+	char *path;
+	int argc;
+	unsigned int line_count;
+	int err_num;
+	int linecount_flag;
+	char *fname;
+	list_t *env;
+	list_t *history;
+	list_t *alias;
+	char **environ;
+	int env_changed;
+	int status;
+	int readfd;
+	int histcount;
+	int cmd_buf_type;
+} info_t;
+
+ssize_t get_input(info_t *);
+int my_getline(info_t *, char **, size_t *);
+void sigHand(int);
 
 #endif
