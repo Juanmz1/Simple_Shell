@@ -1,5 +1,7 @@
 #ifndef SHELL_H
 #define SHELL_H
+#ifndef I_PRINTF_H
+#define I_PRINTF_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,7 +25,7 @@ int main(int ac, char *argv[]);
 char *togetenv(char *cmd);
 char *print_env(char *cmd);
 size_t my_getline(char **lineptr, size_t *n, FILE *stream);
-
+int i_printf(const char *format, ...);
 typedef struct passinfo
 {
 	char *arg;
