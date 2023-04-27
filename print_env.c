@@ -5,7 +5,8 @@
 extern char **environ;
 #define MAX_CMD 256
 
-/* print_env - an in built command to print the env variables
+/**
+ * print_env - an in built command to print the env variables
  * @cmd: command to access the string inputed
  * Return: return a pointer to a char
 */
@@ -15,7 +16,7 @@ char *print_env(char *cmd)
 	int i = 0;
 	size_t n = 0;
 	ssize_t n_read;
-	
+
 	cmd = malloc(sizeof(char) * 64);
 	n_read = getline(&cmd, &n, stdin);
 
@@ -34,7 +35,7 @@ char *print_env(char *cmd)
 		}
 	}
 	free(cmd);
-	
+
 	return (NULL);
 }
 
