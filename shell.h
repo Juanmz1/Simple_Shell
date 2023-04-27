@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <limits.h>
+#include <stddef.h>
 #include <fcntl.h>
 #include <errno.h>
 #define MAX_ARGS 10
@@ -48,7 +49,6 @@ typedef struct passinfo
 } info_t;
 
 ssize_t get_input(info_t *);
-int my_getline(info_t *, char **, size_t *);
 void sigHand(int);
 
 #endif
