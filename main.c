@@ -23,12 +23,12 @@ argv[1] = NULL;
 while (1)
 {
 if (isatty(STDIN_FILENO))
-i_printf("%s", prompt);
+printf("%s", prompt);
 lineptr = malloc(sizeof(char) * n);
-n_char = my_getline(&lineptr, &n, stdin);
+n_char = getline(&lineptr, &n, stdin);
 if (n_char == -1)
 {
-i_printf("EXITING SHELL");
+printf("EXITING SHELL");
 return (-1);
 }
 if (*lineptr != '\n')

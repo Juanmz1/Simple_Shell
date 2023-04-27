@@ -1,7 +1,5 @@
 #ifndef SHELL_H
 #define SHELL_H
-#ifndef I_PRINTF_H
-#define I_PRINTF_H
 
 #include <stdio.h>
 #include <stdlib.h>
