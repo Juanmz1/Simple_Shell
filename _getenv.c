@@ -24,7 +24,6 @@ char *togetenv(char *cmd)
 		path_cpy = strdup(path);
 		cmd_len = strlen(cmd);
 		token_path = strtok(path_cpy, ":");
-		
 		while (token_path != NULL)
 		{
 			direc_len = strlen(token_path);
@@ -33,7 +32,7 @@ char *togetenv(char *cmd)
 			strcat(file, "/");
 			strcat(file, cmd);
 			strcat(file, "\0");
-			
+
 			if (stat(file, &buff) == 0)
 			{
 				free(path_cpy);
@@ -42,11 +41,11 @@ char *togetenv(char *cmd)
 			else
 			{
 				free(file);
-				token_path =strtok(NULL, ":");
+				token_path = strtok(NULL, ":");
 			}
 		}
 		free(path_cpy);
-		
+
 		if (stat(cmd, &buff) == 0)
 		{
 			return (cmd);
