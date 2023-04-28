@@ -63,13 +63,118 @@ void token(file_of_prog *data);
 char *my_strtok(char *line, char *deli);
 int excecmd(file_of_prog *data);
 int builtin_lt(file_of_prog *data);
-/*
-void exit_shell(int status);
-char **token_cmd(char *lineptr_cpy);
-extern char **environ;
-void excecmd(char **arr);
-int main(int ac, char *argv[]);
-char *togetenv(char *cmd);
-char *print_env(char *cmd);*/
+/*findpath*/
+int find_prog(file_of_prog *data);
+int **token_path(file_of_prog *data);
+int check_file(char *full_path);
+/*help*/
+void free_arr_pointers(char **directories);
+void free_recur_data(file_of_prog *data);
+void free_all_data(file_of_prog *data);
+/*builtin.more*/
+int builtin_exit(file_of_prog *data);
+
+/* Change the current directory */
+int builtin_cd(file_of_prog *data);
+
+/* set the work directory */
+int set_wk_dir(file_of_prog *data, char *new_dir);
+
+/* show help information */
+int builtin_help(file_of_prog *data);
+
+/* set, unset and show alias */
+int builtin_alias(file_of_prog *data);
+
+
+/*======== builtins_env.c ========*/
+
+/* Shows the environment where the shell runs */
+int builtin_env(file_of_prog *data);
+
+/* create or override a variable of environment */
+int builtin_set_env(file_of_prog *data);
+
+/* delete a variable of environment */
+int builtin_unset_env(file_of_prog *data);
+
+
+/************** HELPERS FOR ENVIRONMENT VARIABLES MANAGEMENT **************/
+
+
+/*======== env_management.c ========*/
+
+/* Gets the value of an environment variable */
+char *env_get(char *name, file_of_prog *data);
+
+/* Overwrite the value of the environment variable */
+int env_set(char *key, char *value, file_of_prog *data);
+
+/* Remove a key from the environment */
+int env_rem(char *key, file_of_prog *data);
+
+/* prints the current environ */
+void print_env(file_of_prog *data);
+
+
+/************** HELPERS FOR PRINTING **************/
+
+
+/*======== helpers_print.c ========*/
+
+/* Prints a string in the standar output */
+int my_printf(char *string);
+
+/* Prints a string in the standar error */
+int my_printf_e(char *string);
+
+/* Prints a string in the standar error */
+int my_printf_error(int errorcode, file_of_prog *data);
+
+
+/************** HELPERS FOR STRINGS MANAGEMENT **************/
+
+
+/*======== helpers_string.c ========*/
+
+/* Counts the number of characters of a string */
+int str_len(char *string);
+
+/* Duplicates an string */
+char *str_dup(char *string);
+
+/* Compares two strings */
+int str_cmp(char *string1, char *string2, int number);
+
+/* Concatenates two strings */
+char *str_cat(char *string1, char *string2);
+
+/* Reverse a string */
+void str_rev(char *string);
+
+
+/*======== helpers_numbers.c ========*/
+
+/* Cast from int to string */
+void long_str(long number, char *string, int base);
+
+/* convert an string in to a number */
+int my_atoi(char *s);
+
+/* count the coincidences of character in string */
+int count_char(char *string, char *character);
+
+
+/*======== alias_management.c ========*/
+
+/* print the list of alias */
+int print_alias(file_of_prog *data, char *alias);
+
+/* get the alias name */
+char *get_alias(file_of_prog *data, char *alias);
+
+/* set the alias name */
+int set_alias(char *alias_string, file_of_prog *data);
+
 
 #endif
