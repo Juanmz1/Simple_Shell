@@ -6,38 +6,48 @@
 #include <stdlib.h>
 /**
  * excecmd - execute a command and fork the process
- * @arrs: Arrays of string gotten from the command line
- * Return: void
+ * @data: Acess to the program file
+ * Return: if success return 0 else return -1
  */
-#define MAX_COMMANDS 10
-void excecmd(char **arrs)
+int excecmd(file_of_prog *data)
 {
-	pid_t pid;
+	pid_t pidd;
 	int status;
-	char *cmd_act = NULL;
-	char *cmd_envp = NULL;
-
-	pid = fork();
-	if (pid == -1)
+	int val = 0;
+	
+	val = builtin_lt(data);
+	if (val != -1)
+		return (val);
+	val = find_prog(data);
+	if (val)
 	{
-		perror("Error: fork issue");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		cmd_envp = print_env(arrs[0]);
-		cmd_act = togetenv(arrs[0]);
-		if (execve(cmd_act, arrs, NULL) == -1)
-		{
-			perror("./shell: No such file or directory\n");
-		}
-		if (execve(cmd_envp, arrs, NULL) == -1)
-		{
-			perror("./shell: No such file or directory\n");
-		}
+		return (val);
 	}
 	else
 	{
-		wait(&status);
+		pidd = fork();
+		if (pidd == -1)
+		{
+			perror(data->com_name);
+			exit(EXIT_FAILURE);
+		}
+		if (pid == 0)
+		{
+			val = execve(data->tokens[0], data->tokens, data->env);
+			if (val == -1)
+			{
+				perror(data->com_name);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else 
+		{
+			wait(&status);
+			if (WIFEXITED(status))
+				errno = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				errno = 128 + WTERMSIG(status);
+		}
 	}
+	return (0);
 }

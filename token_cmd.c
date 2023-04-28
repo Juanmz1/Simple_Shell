@@ -4,47 +4,42 @@
 #include <string.h>
 #include <unistd.h>
 /**
- * token_cmd - to separate the arrays of strings
- * @cmd: commands pass
+ * token - to separate the arrays of strings
+ * @data: a pointer to the program data
  * Return: Arrays of string
  */
-char **token_cmd(char *lineptr_cpy)
+void token(file_of_prog *data)
 {
-	char **argv;
-	char *token;
-	int token_num = 0, i = 0;
+	char *deli = "\t";
+	int count = 2, i, len, j;
 
-	argv = malloc(sizeof(char *) * 8);
-	if (argv == NULL)
+	len = str_len(data->inp_line);
+	if (len)
 	{
-		perror("can't allocate space");
-		exit(EXIT_FAILURE);
+		if(data->inp_line[len - 1] == '\n')
+			data->inp_line[len - 1] = '\0';
 	}
-	token = strtok(lineptr_cpy, " ");
-	while (token != NULL)
+	for (i = 0; data->inp_line[i]; i++)
 	{
-		while (token[token_num])
+		for (j = 0; deli[i]; j++)
 		{
-			if (token[token_num] == '\n')
+			if (data->inp_line[i] == deli[j])
 			{
-				token[token_num] = '\0';
+				count++;
 			}
-			token_num++;
 		}
-		argv[i] = malloc(sizeof(char) * token_num);
-		if (argv[i] == NULL)
+		data->tokens = malloc(count * sizeof(char *));
+		if (data->tokens == NULL)
 		{
-			perror("memory allocation error");
-			exit(EXIT_FAILURE);
+			perror(data->prog_name);
+			exit(errno);
 		}
-		strcpy(argv[i], token);
-		i++;
-		token_num = 0;
-		token = strtok(NULL, " ");
+		i = 0;
+		data->tokens[i] = str_dup(my_strtok(data->inp_line, deli));
+		data->com_name = str_dup(data->tokens[0]);
+		while (data->tokens[i++])
+		{
+			data->tokens[i] = str_dup(my_strtok(NULL, deli));
+		}
 	}
-	argv[i] = NULL;
-
-	return (argv);
 }
-
-
