@@ -1,47 +1,41 @@
 #include "shell.h"
-#include <sys/wait.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdlib.h>
 /**
- * excecmd - execute a command and fork the process
- * @data: Acess to the program file
- * Return: if success return 0 else return -1
+ * execute - execute a command with its entire path variables.
+ * @data: a pointer to the program's data
+ * Return: If sucess returns zero, otherwise, return -1.
  */
-int excecmd(file_of_prog *data)
+int execute(data_of_program *data)
 {
+	int retval = 0, status;
 	pid_t pidd;
-	int status;
-	int val = 0;
-	
-	val = builtin_lt(data);
-	if (val != -1)
-		return (val);
-	val = find_prog(data);
-	if (val)
-	{
-		return (val);
+
+	/* check for program in built ins */
+	retval = builtins_list(data);
+	if (retval != -1)/* if program was found in built ins */
+		return (retval);
+
+	/* check for program file system */
+	retval = find_program(data);
+	if (retval)
+	{/* if program not found */
+		return (retval);
 	}
 	else
-	{
-		pidd = fork();
+	{/* if program was found */
+		pidd = fork(); /* create a child process */
 		if (pidd == -1)
-		{
-			perror(data->com_name);
+		{ /* if the fork call failed */
+			perror(data->command_name);
 			exit(EXIT_FAILURE);
 		}
 		if (pidd == 0)
-		{
-			val = execve(data->tokens[0], data->tokens, data->env);
-			if (val == -1)
-			{
-				perror(data->com_name);
-				exit(EXIT_FAILURE);
-			}
+		{/* I am the child process, I execute the program*/
+			retval = execve(data->tokens[0], data->tokens, data->env);
+			if (retval == -1) /* if error when execve*/
+				perror(data->command_name), exit(EXIT_FAILURE);
 		}
-		else 
-		{
+		else
+		{/* I am the father, I wait and check the exit status of the child */
 			wait(&status);
 			if (WIFEXITED(status))
 				errno = WEXITSTATUS(status);

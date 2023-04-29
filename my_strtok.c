@@ -1,43 +1,42 @@
 #include "shell.h"
-
 /**
- * my_strtok - separate strings with delimiters
- * @line: - recieve in getline
- * @deli: - that separate the string with variable
+ * _strtok - separates strings with delimiters
+ * @line: It´s pointer to array we receive in getline.
+ * @delim: It´s characters we mark off string in parts.
  * Return: A pointer to the created token
- */
-char *my_strtok(char *line, char *deli)
+*/
+char *_strtok(char *line, char *delim)
 {
 	int j;
 	static char *str;
-	char *str_cpy;
+	char *copystr;
 
 	if (line != NULL)
 		str = line;
 	for (; *str != '\0'; str++)
 	{
-		for(j = 0; deli[j] != '\0'; j++)
+		for (j = 0; delim[j] != '\0'; j++)
 		{
-			if (*str == deli[j])
-				break;
+			if (*str == delim[j])
+			break;
 		}
-		if (deli[j] == '\0')
+		if (delim[j] == '\0')
 			break;
 	}
-	str_cpy = str;
-	if (*str_cpy == '\0')
+	copystr = str;
+	if (*copystr == '\0')
 		return (NULL);
-	for (; str != '\0'; str++)
+	for (; *str != '\0'; str++)
 	{
-		for(j = 0; deli[j] != '\0'; j++)
+		for (j = 0; delim[j] != '\0'; j++)
 		{
-			if (*str == deli[j])
+			if (*str == delim[j])
 			{
 				*str = '\0';
 				str++;
-				return (str_cpy);
+				return (copystr);
 			}
 		}
 	}
-	return (str_cpy);
+	return (copystr);
 }

@@ -1,45 +1,41 @@
 #include "shell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 /**
- * token - to separate the arrays of strings
- * @data: a pointer to the program data
- * Return: Arrays of string
+ * tokenize - this function separate the string using a designed delimiter
+ * @data: a pointer to the program's data
+ * Return: an array of the different parts of the string
  */
-void token(file_of_prog *data)
+void tokenize(data_of_program *data)
 {
-	char *deli = "\t";
-	int count = 2, i, len, j;
+	char *delimiter = " \t";
+	int i, j, counter = 2, length;
 
-	len = str_len(data->inp_line);
-	if (len)
+	length = str_length(data->input_line);
+	if (length)
 	{
-		if(data->inp_line[len - 1] == '\n')
-			data->inp_line[len - 1] = '\0';
+		if (data->input_line[length - 1] == '\n')
+			data->input_line[length - 1] = '\0';
 	}
-	for (i = 0; data->inp_line[i]; i++)
+
+	for (i = 0; data->input_line[i]; i++)
 	{
-		for (j = 0; deli[i]; j++)
+		for (j = 0; delimiter[j]; j++)
 		{
-			if (data->inp_line[i] == deli[j])
-			{
-				count++;
-			}
+			if (data->input_line[i] == delimiter[j])
+				counter++;
 		}
-		data->tokens = malloc(count * sizeof(char *));
-		if (data->tokens == NULL)
-		{
-			perror(data->prog_name);
-			exit(errno);
-		}
-		i = 0;
-		data->tokens[i] = str_dup(my_strtok(data->inp_line, deli));
-		data->com_name = str_dup(data->tokens[0]);
-		while (data->tokens[i++])
-		{
-			data->tokens[i] = str_dup(my_strtok(NULL, deli));
-		}
+	}
+
+	data->tokens = malloc(counter * sizeof(char *));
+	if (data->tokens == NULL)
+	{
+		perror(data->program_name);
+		exit(errno);
+	}
+	i = 0;
+	data->tokens[i] = str_duplicate(_strtok(data->input_line, delimiter));
+	data->command_name = str_duplicate(data->tokens[0]);
+	while (data->tokens[i++])
+	{
+		data->tokens[i] = str_duplicate(_strtok(NULL, delimiter));
 	}
 }

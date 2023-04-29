@@ -1,113 +1,112 @@
 #include "shell.h"
+
 /**
- * exp_var - expand variables
+ * expand_variables - expand variables
  * @data: a pointer to a struct of the program's data
  *
  * Return: nothing, but sets errno.
  */
-void exp_var(file_of_prog *data)
+void expand_variables(data_of_program *data)
 {
 	int i, j;
-	char line[BUFFER_SIZE] = {0}, expan[BUFFER_SIZE] = {'\0'};
-	char *temp;
+	char line[BUFFER_SIZE] = {0}, expansion[BUFFER_SIZE] = {'\0'}, *temp;
 
-	if(data->inp_line == NULL)
+	if (data->input_line == NULL)
 		return;
-	buff_add(line, data->inp_line);
+	buffer_add(line, data->input_line);
 	for (i = 0; line[i]; i++)
-		if(line[i] == '#')
-			line[i--] == '\0';
-		else if (line[i] == '$' && line[i +1] == '?')
+		if (line[i] == '#')
+			line[i--] = '\0';
+		else if (line[i] == '$' && line[i + 1] == '?')
 		{
 			line[i] = '\0';
-			long_str(errno, expan, 10);
-			buff_add(line, expan);
-			buff_add(line, data->inp_line + i + 2);
+			long_to_string(errno, expansion, 10);
+			buffer_add(line, expansion);
+			buffer_add(line, data->input_line + i + 2);
 		}
-		else if (line[i] == '$' && line[i +1] == '$')
-                {       
-                        line[i] = '\0';
-                        long_str(getpid(), expan, 10);
-                        buff_add(line, expan);
-                        buff_add(line, data->inp_line + i + 2);
-                }
-		else if (line[i] == '$' && line[i +1] == ' ' || line[i + 1] == '\0')
+		else if (line[i] == '$' && line[i + 1] == '$')
+		{
+			line[i] = '\0';
+			long_to_string(getpid(), expansion, 10);
+			buffer_add(line, expansion);
+			buffer_add(line, data->input_line + i + 2);
+		}
+		else if (line[i] == '$' && (line[i + 1] == ' ' || line[i + 1] == '\0'))
 			continue;
 		else if (line[i] == '$')
 		{
 			for (j = 1; line[i + j] && line[i + j] != ' '; j++)
-				expan[j - 1] = line[i + j];
-			temp = env_get(expan, data);
-			line[i] = '\0', expan[0] = '\0';
-			buff_add(expan, line + i + j);
-			temp ? buff_add(line, expan) : 1;
-			buff_add(line, expan);
+				expansion[j - 1] = line[i + j];
+			temp = env_get_key(expansion, data);
+			line[i] = '\0', expansion[0] = '\0';
+			buffer_add(expansion, line + i + j);
+			temp ? buffer_add(line, temp) : 1;
+			buffer_add(line, expansion);
 		}
-	if (!str_cmp(data->inp_line, line, 0))
+	if (!str_compare(data->input_line, line, 0))
 	{
-		free(data->inp_line);
-		data->inp_line = str_dup(line);
+		free(data->input_line);
+		data->input_line = str_duplicate(line);
 	}
 }
 
-
 /**
- * exp_alias - expans aliases
+ * expand_alias - expans aliases
  * @data: a pointer to a struct of the program's data
  *
  * Return: nothing, but sets errno.
  */
-void exp_alias(file_of_prog *data)
+void expand_alias(data_of_program *data)
 {
-	int i, j, w_exp = 0;
-	char line[BUFFER_SIZE] = {0}, expan[BUFFER_SIZE] = {'\0'}, *temp;
+	int i, j, was_expanded = 0;
+	char line[BUFFER_SIZE] = {0}, expansion[BUFFER_SIZE] = {'\0'}, *temp;
 
-	if (data->inp_line == NULL)
+	if (data->input_line == NULL)
 		return;
 
-	buff_add(line, data->inp_line);
+	buffer_add(line, data->input_line);
 
 	for (i = 0; line[i]; i++)
 	{
 		for (j = 0; line[i + j] && line[i + j] != ' '; j++)
-			expan[j] = line[i + j];
-		expan[j] = '\0';
+			expansion[j] = line[i + j];
+		expansion[j] = '\0';
 
-		temp = get_alias(data, expan);
+		temp = get_alias(data, expansion);
 		if (temp)
 		{
-			expan[0] = '\0';
-			buff_add(expan, line + i + j);
+			expansion[0] = '\0';
+			buffer_add(expansion, line + i + j);
 			line[i] = '\0';
-			buff_add(line, temp);
-			line[str_len(line)] = '\0';
-			buff_add(line, expan);
-			w_exp = 1;
+			buffer_add(line, temp);
+			line[str_length(line)] = '\0';
+			buffer_add(line, expansion);
+			was_expanded = 1;
 		}
 		break;
 	}
-	if (w_exp)
+	if (was_expanded)
 	{
-		free(data->inp_line);
-		data->inp_line = str_dup(line);
+		free(data->input_line);
+		data->input_line = str_duplicate(line);
 	}
 }
 
 /**
- * buff_add - append string at end of the buffer
- * @buff: buffer to be filled
- * @str: string to be copied in the buffer
+ * buffer_add - append string at end of the buffer
+ * @buffer: buffer to be filled
+ * @str_to_add: string to be copied in the buffer
  * Return: nothing, but sets errno.
  */
-int buff_add(char *buff, char *str)
+int buffer_add(char *buffer, char *str_to_add)
 {
-	int len, i;
+	int length, i;
 
-	len = str_len(buff);
-	for (i = 0; str[i]; i++)
+	length = str_length(buffer);
+	for (i = 0; str_to_add[i]; i++)
 	{
-		buff[len + i] = str[i];
+		buffer[length + i] = str_to_add[i];
 	}
-	buff[len + i] = '\0';
-	return (len + i);
+	buffer[length + i] = '\0';
+	return (length + i);
 }

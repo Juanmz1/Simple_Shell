@@ -5,7 +5,7 @@
  * @data: struct for the program's data
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int builtin_exit(file_of_prog *data)
+int builtin_exit(data_of_program *data)
 {
 	int i;
 
@@ -18,7 +18,7 @@ int builtin_exit(file_of_prog *data)
 				errno = 2;
 				return (2);
 			}
-		errno =my_atoi(data->tokens[1]);
+		errno = _atoi(data->tokens[1]);
 	}
 	free_all_data(data);
 	exit(errno);
@@ -29,27 +29,27 @@ int builtin_exit(file_of_prog *data)
  * @data: struct for the program's data
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int builtin_cd(file_of_prog *data)
+int builtin_cd(data_of_program *data)
 {
-	char *dir_home = env_get("HOME", data), *dir_old = NULL;
+	char *dir_home = env_get_key("HOME", data), *dir_old = NULL;
 	char old_dir[128] = {0};
 	int error_code = 0;
 
 	if (data->tokens[1])
 	{
-		if (str_cmp(data->tokens[1], "-", 0))
+		if (str_compare(data->tokens[1], "-", 0))
 		{
-			dir_old = env_get("OLDPWD", data);
+			dir_old = env_get_key("OLDPWD", data);
 			if (dir_old)
-				error_code = set_wk_dir(data, dir_old);
-			my_printf(env_get("PWD", data));
-			my_printf("\n");
+				error_code = set_work_directory(data, dir_old);
+			_print(env_get_key("PWD", data));
+			_print("\n");
 
 			return (error_code);
 		}
 		else
 		{
-			return (set_wk_dir(data, data->tokens[1]));
+			return (set_work_directory(data, data->tokens[1]));
 		}
 	}
 	else
@@ -57,25 +57,25 @@ int builtin_cd(file_of_prog *data)
 		if (!dir_home)
 			dir_home = getcwd(old_dir, 128);
 
-		return (set_wk_dir(data, dir_home));
+		return (set_work_directory(data, dir_home));
 	}
 	return (0);
 }
 
 /**
- * set_wk_dir - set the work directory
+ * set_work_directory - set the work directory
  * @data: struct for the program's data
  * @new_dir: path to be set as work directory
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int set_wk_dir(file_of_prog *data, char *new_dir)
+int set_work_directory(data_of_program *data, char *new_dir)
 {
 	char old_dir[128] = {0};
 	int err_code = 0;
 
 	getcwd(old_dir, 128);
 
-	if (!str_cmp(old_dir, new_dir, 0))
+	if (!str_compare(old_dir, new_dir, 0))
 	{
 		err_code = chdir(new_dir);
 		if (err_code == -1)
@@ -83,9 +83,9 @@ int set_wk_dir(file_of_prog *data, char *new_dir)
 			errno = 2;
 			return (3);
 		}
-		env_set("PWD", new_dir, data);
+		env_set_key("PWD", new_dir, data);
 	}
-	env_set("OLDPWD", old_dir, data);
+	env_set_key("OLDPWD", old_dir, data);
 	return (0);
 }
 
@@ -94,7 +94,7 @@ int set_wk_dir(file_of_prog *data, char *new_dir)
  * @data: struct for the program's data
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int builtin_help(file_of_prog *data)
+int builtin_help(data_of_program *data)
 {
 	int i, length = 0;
 	char *mensajes[6] = {NULL};
@@ -104,13 +104,13 @@ int builtin_help(file_of_prog *data)
 	/* validate args */
 	if (data->tokens[1] == NULL)
 	{
-		my_printf(mensajes[0] + 6);
+		_print(mensajes[0] + 6);
 		return (1);
 	}
 	if (data->tokens[2] != NULL)
 	{
 		errno = E2BIG;
-		perror(data->com_name);
+		perror(data->command_name);
 		return (5);
 	}
 	mensajes[1] = HELP_EXIT_MSG;
@@ -121,16 +121,16 @@ int builtin_help(file_of_prog *data)
 
 	for (i = 0; mensajes[i]; i++)
 	{
-		length = str_len(data->tokens[1]);
-		if (str_cmp(data->tokens[1], mensajes[i], length))
+		length = str_length(data->tokens[1]);
+		if (str_compare(data->tokens[1], mensajes[i], length))
 		{
-			my_printf(mensajes[i] + length + 1);
+			_print(mensajes[i] + length + 1);
 			return (1);
 		}
 	}
 	/*if there is no match, print error and return -1 */
 	errno = EINVAL;
-	perror(data->com_name);
+	perror(data->command_name);
 	return (0);
 }
 
@@ -139,7 +139,7 @@ int builtin_help(file_of_prog *data)
  * @data: struct for the program's data
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int builtin_alias(file_of_prog *data)
+int builtin_alias(data_of_program *data)
 {
 	int i = 0;
 
@@ -149,7 +149,7 @@ int builtin_alias(file_of_prog *data)
 
 	while (data->tokens[++i])
 	{/* if there are arguments, set or print each env variable*/
-		if (count_char(data->tokens[i], "="))
+		if (count_characters(data->tokens[i], "="))
 			set_alias(data->tokens[i], data);
 		else
 			print_alias(data, data->tokens[i]);
