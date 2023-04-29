@@ -24,7 +24,7 @@ void free_recur_data(file_of_prog *data)
  * @data: struct of the program's data
  * Return: Nothing
  */
-void free_all_data(data_of_prog *data)
+void free_all_data(file_of_prog *data)
 {
 	if (data->file_des != 0)
 	{

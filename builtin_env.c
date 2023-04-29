@@ -8,7 +8,7 @@
 int builtin_env(file_of_prog *data)
 {
 	int i;
-	char cpname[50] = {'\0'};
+	char cpname[50] = {'\0'}
 	char *var_copy = NULL;
 
 	/* if not arguments */
@@ -27,7 +27,7 @@ int builtin_env(file_of_prog *data)
 
 				/* print the environ */
 				print_env(data);
-				if (env_get_key(cpname, data) == NULL)
+				if (env_get(cpname, data) == NULL)
 				{/* print the variable if it does not exist in the environ */
 					my_printf(data->tokens[1]);
 					my_printf("\n");

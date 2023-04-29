@@ -17,7 +17,7 @@ int builtin_lt(file_of_prog *data)
 		{"env", builtin_env},
 		{"setenv", builtin_set_env},
 		{"unsetenv", builtin_unset_env},
-		{NULL,NULL}
+		{NULL, NULL}
 	};
 
 	for (ite = 0; opt[ite].builtin != NULL; ite++)

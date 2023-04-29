@@ -31,7 +31,7 @@ int builtin_exit(file_of_prog *data)
  */
 int builtin_cd(file_of_prog *data)
 {
-	char *dir_home = env_get_key("HOME", data), *dir_old = NULL;
+	char *dir_home = env_get("HOME", data), *dir_old = NULL;
 	char old_dir[128] = {0};
 	int error_code = 0;
 
@@ -41,9 +41,9 @@ int builtin_cd(file_of_prog *data)
 		{
 			dir_old = env_get("OLDPWD", data);
 			if (dir_old)
-				error_code = set_work_directory(data, dir_old);
-			my_print(env_get("PWD", data));
-			my_print("\n");
+				error_code = set_wk_dir(data, dir_old);
+			my_printf(env_get("PWD", data));
+			my_printf("\n");
 
 			return (error_code);
 		}
@@ -68,7 +68,7 @@ int builtin_cd(file_of_prog *data)
  * @new_dir: path to be set as work directory
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int set_work_directory(data_of_program *data, char *new_dir)
+int set_wk_dir(file_of_prog *data, char *new_dir)
 {
 	char old_dir[128] = {0};
 	int err_code = 0;
@@ -104,7 +104,7 @@ int builtin_help(file_of_prog *data)
 	/* validate args */
 	if (data->tokens[1] == NULL)
 	{
-		my_print(mensajes[0] + 6);
+		my_printf(mensajes[0] + 6);
 		return (1);
 	}
 	if (data->tokens[2] != NULL)
@@ -124,7 +124,7 @@ int builtin_help(file_of_prog *data)
 		length = str_len(data->tokens[1]);
 		if (str_cmp(data->tokens[1], mensajes[i], length))
 		{
-			my_print(mensajes[i] + length + 1);
+			my_printf(mensajes[i] + length + 1);
 			return (1);
 		}
 	}

@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[], char **env)
 {
-	File_of_prog data_struct = {NULL}, *data = &data_struct;
+	file_of_prog data_struct = {NULL}, *data = &data_struct;
 	char *prompt = " ";
 	
 	initialize_data(data, argc, argv, env);
@@ -32,7 +32,7 @@ int main(int argc, char *argv[], char **env)
  * when the signal SIGINT (ctrl + c) is send to the program
  * @UNUSED: option of the prototype
  */
-void hand_ctrl(int opr unused)
+void hand_ctrl(int opr UNUSED)
 {
 	my_printf("\n");
 	my_printf(PROMPT_MSG);
@@ -73,7 +73,7 @@ void initialize_data(file_of_prog *data, int argc, char *argv[], char **env)
 	{
 		for (; env[i]; i++)
 		{
-			data->env[i] = str_dup(env[i])
+			data->env[i] = str_dup(env[i]);
 		}
 	}
 	data->env[i] = NULL;

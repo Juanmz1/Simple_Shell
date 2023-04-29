@@ -1,3 +1,4 @@
+#include "shell.h"
 /**
 * my_getline - read one line from the prompt.
 * @data: struct for the program's data
@@ -18,7 +19,7 @@ int my_getline(file_of_prog *data)
 			free(array_cmd[i]);
 			array_cmd[i] = NULL;
 		}
-		bytes_read = read(data->file_des, &buff, BUFFER_SIZE -1)
+		bytes_read = read(data->file_des, &buff, BUFFER_SIZE -1);
 			if (bytes_read == 0)
 				return (-1);
 		i = 0;
@@ -47,7 +48,7 @@ int my_getline(file_of_prog *data)
 */
 int chk_log_op(char *array_cmd, int i, char array_op)
 {
-	char *temp = NULL;
+	char *temp = {NULL};
 	int j;
 
 	for (j = 0; array_cmd[i] != NULL && array_cmd[i][j]; j++)

@@ -13,7 +13,7 @@ int print_alias(file_of_prog *data, char *alias)
 
 	if (data->alias_list)
 	{
-		alias_length = str_length(alias);
+		alias_length = str_len(alias);
 		for (i = 0; data->alias_lt[i]; i++)
 		{
 			if (!alias || (str_cmp(data->alias_lt[i], alias, alias_length)
@@ -93,7 +93,7 @@ int set_alias(char *alias_string, file_of_prog *data)
 	/* Iterates through the alias list and check for coincidence of the varname */
 	for (j = 0; data->alias_lt[j]; j++)
 		if (str_cmp(buffer, data->alias_lt[j], i) &&
-			data->alias_list[j][i] == '=')
+			data->alias_lt[j][i] == '=')
 		{/* if the alias alredy exist */
 			free(data->alias_lt[j]);
 			break;

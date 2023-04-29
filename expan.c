@@ -24,7 +24,7 @@ void exp_var(file_of_prog *data)
 			buff_add(line, expan);
 			buff_add(line, data->inp_line + i + 2);
 		}
-		else (line[i] == '$' && line[i +1] == '$')
+		else if (line[i] == '$' && line[i +1] == '$')
                 {       
                         line[i] = '\0';
                         long_str(getpid(), expan, 10);

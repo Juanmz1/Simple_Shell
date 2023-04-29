@@ -31,7 +31,7 @@ int excecmd(file_of_prog *data)
 			perror(data->com_name);
 			exit(EXIT_FAILURE);
 		}
-		if (pid == 0)
+		if (pidd == 0)
 		{
 			val = execve(data->tokens[0], data->tokens, data->env);
 			if (val == -1)

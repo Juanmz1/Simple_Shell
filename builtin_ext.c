@@ -31,7 +31,7 @@ int builtin_exit(file_of_prog *data)
  */
 int builtin_cd(file_of_prog *data)
 {
-	char *dir_home = env_get_key("HOME", data), *dir_old = NULL;
+	char *dir_home = env_get("HOME", data), *dir_old = NULL;
 	char old_dir[128] = {0};
 	int error_code = 0;
 
